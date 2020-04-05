@@ -1,0 +1,13 @@
+---
+title:  "Homework 1"
+author: "Rene Gutierrez"
+date:   "4/5/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Homework 1
+
