@@ -8,6 +8,160 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\sgs}{\sigma^2}
+
 
 ## Homework 1
 
+### Problem 1
+
+1. Derive $\dV[\alpha X] = \alpha^2 \dV[X]$
+
+$$
+\begin{aligned}
+\dV[\alpha X] 
+  &= \dE[(\alpha X)^2] - (\dE[\alpha X])^2 \\
+  &= \dE[\alpha^2 X] - (\alpha\dE[X])^2 \\
+  &= \alpha^2 \dE[X] - \alpha^2\dE[X]^2 \\
+  &= \alpha^2 (\dE[X] - \dE[X]^2) \\
+  &= \alpha^2 \dV[X] \\
+\end{aligned}
+$$
+
+2. Prove that if $X$ and $Y$ are independent, then we have
+
+$$\dV[X+Y] = \dV[X] + \dV[Y]$$
+
+$$
+\begin{aligned}
+\dV[X+Y] 
+  &= \dE[(X+Y)^2] - (\dE[X+Y])^2 \\
+  &= \dE[X^2 + 2 XY + Y^2] - (\dE[X] + \dE[Y])^2  \\
+  &= \dE[X^2] + 2\dE[XY] + \dE[Y^2] - \dE[X]^2 - 2\dE[X]\dE[Y] - \dE[Y]^2  \\
+  &= \dE[X^2] + 2\dE[X]\dE[Y] + \dE[Y^2] - \dE[X]^2 - 2\dE[X]\dE[Y] - \dE[Y]^2 &\text{by independence}  \\
+  &= \dE[X^2]  - \dE[X]^2 + \dE[Y^2] - \dE[Y]^2\\
+  &= \dV[X] + \dV[Y]\\
+\end{aligned}
+$$
+
+## Problem 2
+
+Let $X \sim \Bd(n, p)$. We know
+
+$$\dE[X] = n p $$
+$$ \dV[X] = n p (1-p) $$
+Use these results to calculate $\dE[X^2]$. Write the results as a polynomial of $n$.
+
+We have that
+
+$$\dV[X] = \dE[X^2] - \dE[X]^2$$
+then
+
+$$
+\begin{aligned}
+\dE[X^2] 
+  &= \dV[X] + \dE[X]^2 \\
+  &= np(1-p) + (np)^2 \\
+  &= pn^2 + p(1-p)n
+\end{aligned}
+$$
+
+## Problem 3
+
+Let $X \sim \Nd(\mu, \sgs)$. Fill in the details in the derivation
+
+$$
+\begin{aligned}
+\dP(\mu - \eta \sigma \leq X \leq \mu + \eta \sigma) 
+  &= F_X(\mu + \eta \sigma) - F_X(\mu - \eta \sigma) \\
+  &= F_X(\mu + \eta \sigma) - F_X(\mu - \eta \sigma) \\
+  &= \frac{1}{2} \left( 1 + \erf\left(\frac{\mu + \eta \sigma - \mu}{\sqrt{2} \sigma}\right) \right) - \frac{1}{2} \left( 1 +  \erf\left(\frac{\mu - \eta \sigma - \mu}{\sqrt{2} \sigma}\right) \right) \\
+  &= \frac{1}{2} + \frac{1}{2} \erf\left(\frac{\eta}{\sqrt{2}}\right) - \frac{1}{2} - \frac{1}{2} \erf\left(\frac{-\eta}{\sqrt{2} \sigma}\right) \\
+  &= \frac{1}{2} \left( \erf\left(\frac{\eta}{\sqrt{2}}\right) - \erf\left(\frac{- \eta}{\sqrt{2} \sigma}\right) \right) \\
+  &= \frac{1}{2} \left( \erf\left(\frac{\eta}{\sqrt{2}}\right) + \erf\left(\frac{\eta}{\sqrt{2} \sigma}\right) \right) \\
+  &= \erf \left(\frac{\eta}{\sqrt{2}} \right)
+\end{aligned}
+$$
+
+## Problem 4
+
+1. Compute $\dE[X]$
+
+Note that:
+
+$$\dE[X | Y=m] = mp $$
+
+then
+
+$$
+\begin{aligned}
+\dE[X] &= \dE[\dE[X|Y]] &\text{by law of total expectation} \\
+  &= \dE[Yp] \\
+  &= p\dE[Y] \\
+  &= p(np) \\
+  &= np^2 \\
+\end{aligned}
+$$
+
+2. Compute $\dE[XY]$
+
+$$
+\begin{aligned}
+\dE[XY] &= \dE[\dE[XY|Y]] &\text{by law of total expectation} \\
+  &= \dE[Y\dE[X|Y]] &\text{by by linearity} \\
+  &= \dE[Y(Yp)] \\
+  &= p\dE[Y^2] \\
+  &= p(pn^2 + p(1-p)n) \\
+  &= p^2n^2 + p^2(1-p)n \\
+\end{aligned}
+$$
+
+## Problem 5
+
+1. Known variance:
+
+```{r p5-1}
+### Sampling Set-up
+seed <- 1
+n    <- 10
+M    <- 500000
+m    <- 0.6
+s    <- 1.3
+
+
+### Draws the samples
+x <- matrix(rnorm(n = n * M, m, s),
+            nrow = M,
+            ncol = n)
+
+mea    <- rowMeans(x)
+
+conInt <- cbind(mea - 1.96 * s / sqrt(n), mea + 1.96 * s / sqrt(n))
+
+inConInt <- (conInt[, 1] < m) * (conInt[, 2] > m)
+
+proIn    <- sum(inConInt) / M
+
+```
+
+The estimate of the probability that the exact 95\% confidence interval contains $\mu^{true}$ is: `r proIn`.
+
+2. Unknown variance:
+
+```{r p5-2}
+es <- apply(x, 1, var)
+conInt <- cbind(mea - 1.96 * es / sqrt(n), mea + 1.96 * es / sqrt(n))
+
+inConInt <- (conInt[, 1] < m) * (conInt[, 2] > m)
+
+proIn    <- sum(inConInt) / M
+
+```
+
+The estimate of the probability that the approximate 95\% confidence interval contains $\mu^{true}$ is: `r proIn`.
