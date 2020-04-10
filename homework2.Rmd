@@ -1,0 +1,34 @@
+---
+title:  "Homework 2"
+author: "Rene Gutierrez"
+date:   "4/10/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\sgs}{\sigma^2}
+
+
+## Homework 1
+
+### Problem 1
+
+a. Express $F_Y(y)$ in terms of $F_X(x)$.
+
+$$
+\begin{aligned}
+  F_Y(y) 
+    &= \dP(Y<y)         \\
+    &= \dP(\alpha X <y) \\
+    &= \dP(X <\frac{y}{\alpha}) \\
+    &= F_X \left( \frac{y}{\alpha} \right)
+\end{aligned}
+$$
