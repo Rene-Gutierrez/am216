@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = FALSE)
 \newcommand{\dP}{\mathbb{P}}
 \newcommand{\Nd}{\text{N}}
 \newcommand{\Bd}{\text{Binomial}}
-\newcommand{\sgs}{\sigma^2}
+\newcommand{\gss}{\sigma^2}
 
 
 ## Homework 1
@@ -32,3 +32,240 @@ $$
     &= F_X \left( \frac{y}{\alpha} \right)
 \end{aligned}
 $$
+
+a. Express $f_Y(y)$ in terms of $f_X(x)$.
+
+$$
+\begin{aligned}
+  f_Y(y) 
+    &= \frac{d}{dy} F_Y(y)                              \\
+    &= \frac{d}{dy} F_X \left( \frac{y}{\alpha} \right) \\
+    &= f_X \left( \frac{y}{\alpha} \right) \frac{1}{\alpha} \\
+\end{aligned}
+$$
+
+### Problem 2
+
+Suppose	$X$ and	$Y$ are	independent,	and $X ~	N(\mu_1,	\gss_1)$	and	$X + Y ~	N(\mu_2,	\gss_2)$.
+
+then the characteristic function of $X$ and $X+Y$ are given by:
+
+$$\phi_X(t) = \exp \left( \mu_1 t + \frac{\gss_1 t^2}{2} \right)$$
+and
+$$\phi_{X+Y}(t) = \exp \left( \mu_2 t + \frac{\gss_2 t^2}{2} \right)$$
+respectively. We also have that the characteristic function of $X+Y$ is given by:
+$$
+\begin{aligned}
+  \phi_{X+Y}(t) 
+    &= \dE[e^{it(Y+X)}]       \\
+    &= \dE[e^{itY}e^{itX}] \\
+    &= \dE[e^{itY}]\dE[e^{itX}] &\text{by independence}\\
+    &= \phi_Y(t) \phi_X(t) \\
+  \end{aligned}
+$$
+then:
+$$ \exp \left( \mu_2 t + \frac{\gss_2 t^2}{2} \right) = \phi_Y(t) \left( \mu_1 t + \frac{\gss_1 t^2}{2} \right)$$
+then:
+$$
+\begin{aligned}
+  \phi_Y(t) 
+    &= \exp \left( \mu_2 t + \frac{\gss_2 t^2}{2} \right) 
+       \exp \left( -\mu_1 t - \frac{\gss_1 t^2}{2} \right) \\
+    &= \exp \left( (\mu_2-\mu_1) t + \frac{(\gss_2 - \gss_1) t^2}{2} \right)
+  \end{aligned}
+$$
+therefore:
+$$ Y \sim \Nd (\mu_2-\mu_1, \gss_2 - \gss_1) $$
+
+### Problem 3
+
+a.
+
+$$
+\begin{aligned}
+  \dE[|X|] 
+    &= \int_{-\infty}^{\infty} |x| \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx \\
+    &= \int_{-\infty}^{0} -x \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx        
+     + \int_{0}^{\infty} x \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx \\
+    &= -\int_{0}^{\infty} -x \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx        
+     + \int_{0}^{\infty} x \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx \\
+     &= 2\int_{0}^{\infty} x \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx \\
+     &= \frac{2}{\sqrt{2 \pi}} \int_{0}^{\infty} x \exp \left(-\frac{x^2}{2}\right)dx \\
+     &= \sqrt{\frac{2}{\pi}} \int_{0}^{\infty} x \exp \left(-\frac{x^2}{2}\right)dx \\
+     &= \sqrt{\frac{2}{\pi}} \int_{0}^{\infty} e^{-y}dy &\text{where} \quad y = \frac{x^2}{2} \\
+     &= \sqrt{\frac{2}{\pi}} \left[ -e^{-y}\right|_0^{\infty} \\
+     &= \sqrt{\frac{2}{\pi}} 
+  \end{aligned}
+$$
+
+b. 
+
+$$
+\begin{aligned}
+  \dE[|X|^3] 
+     &= 2\int_{0}^{\infty} x^3 \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx \\
+     &= \frac{2}{\sqrt{2 \pi}} \int_{0}^{\infty} x^3 \exp \left(-\frac{x^2}{2}\right)dx \\
+     &= \sqrt{\frac{2}{\pi}} \left( \left[ -x^2 \exp \left(-\frac{x^2}{2}\right)  \right|_0^\infty
+      + \int_{0}^{\infty} 2x^2 \exp \left(-\frac{x^2}{2}\right)dx \right)
+     & \text{where } u(x)=x^2 \text{ and } v(x)= x \exp \left(-\frac{x^2}{2}\right) \\
+     &= 2 \sqrt{\frac{2}{\pi}} \int_{0}^{\infty} x^2 \exp \left(-\frac{x^2}{2}\right)dx \\
+     &= 2 \sqrt{\frac{2}{\pi}} \left( \left[ -x \exp \left(-\frac{x^2}{2}\right)  \right|_0^\infty
+      + \int_{0}^{\infty} x \exp \left(-\frac{x^2}{2}\right)dx \right)
+     & \text{where } u(x)=x \text{ and } v(x)= x \exp \left(-\frac{x^2}{2}\right) \\
+     &= 2 \sqrt{\frac{2}{\pi}}
+  \end{aligned}
+$$
+
+c.
+
+$$
+\begin{aligned}
+  \dE[|X|^3] 
+     &= 2\int_{0}^{\infty} x^4 \frac{1}{\sqrt{2 \pi}}\exp \left(-\frac{x^2}{2}\right)dx
+     & \text{by symmetry}\\
+     &= \frac{2}{\sqrt{2 \pi}} \int_{0}^{\infty} x^4 \exp \left(-\frac{x^2}{2}\right)dx \\
+     &= \sqrt{\frac{2}{\pi}} \left( \left[ -x^3 \exp \left(-\frac{x^2}{2}\right)  \right|_0^\infty
+      + \int_{0}^{\infty} 3x^3 \exp \left(-\frac{x^2}{2}\right)dx \right)
+     & \text{where } u(x)=x^3 \text{ and } v(x)= x \exp \left(-\frac{x^2}{2}\right) \\
+     &= 3 \sqrt{\frac{2}{\pi}} \int_{0}^{\infty} x^3 \exp \left(-\frac{x^2}{2}\right)dx \\
+     &= 3 \sqrt{\frac{2}{\pi}} \sqrt{\frac{\pi}{2}} 
+     &\text{from last excersice} \\
+     & = 3
+  \end{aligned}
+$$
+
+### Problem 4
+
+Let
+
+$$ C := \text{Your initial selection is correct.} $$
+$$ E := \text{The box you open is empty.} $$
+Call $X=$ Profit if you don't switch and $Y=$ Profit if you switch. Then:
+
+$$\dE[X] = 200 \dP(C\mid E) + 0 \dP(C^c\mid E)$$
+and
+$$\dE[Y] = -5 \dP(C\mid E) + 200 \dP(C^c\mid E) $$
+Now, we have that
+$$ \dP(C \mid E) = \frac{\dP(E \mid C)\dP(C)}{\dP(E)}$$
+by Bayes Theorem. Also note that:
+$$ \dP(E \mid C) = 1 $$
+since, if you select the right door, the other 2 are empty. Similarly,
+$$ \dP(E \mid C^c) = \frac{1}{2} $$
+since if you don't select the right door, one of the is empty. Also
+$$ \dP(E) = \dP(E \mid C) \dP(C) + \dP(E \mid C^c) \dP(C^c) =  1 \frac{1}{3} + \frac{1}{2} \frac{2}{3} = \frac{2}{3} $$
+Therefore:
+$$ \dP(C \mid E) = \frac{\frac{1}{3}}{\frac{2}{3}} = \frac{1}{2} $$
+given this result, you should not pay to switch since:
+
+$$ \dE[X]=100 $$
+and
+$$ \dE[Y]=97.5 $$
+
+```{r Simulation Modified Monty Hall}
+### Number Simulated Games
+sim <- 100000
+### Number of Invalid Games
+inv <- 0
+### Number of Times you are correct/incorrect given a valid game
+cor <- 0
+inc <- 0
+for (s in 1:sim){
+  car <- as.vector(rmultinom(1, 1, c(1/3, 1/3, 1/3))) # Car location
+  sel <- as.vector(rmultinom(1, 1, c(1/3, 1/3, 1/3))) # Initial door Selection
+  ope <- c(1, 2, 3)[!(sel==1)][as.vector(rmultinom(1, 1, c(1/2, 1/2)))] # Open door
+  if(car[ope] == 1){ # The Game is Invalid
+    inv <- inv + 1
+  } else {
+    if(car[sel==1] == 1){
+      cor <- cor + 1
+    } else {
+      inc <- inc + 1
+    }
+  }
+}
+proSta <- 200 * cor / (sim - inv)
+proSwi <- 200 * inc / (sim - inv) - 5 * cor / (sim - inv)
+```
+
+### Problem 5
+
+Using the odd extension with:
+$$
+u(x, 0) = 
+\begin{cases}
+1, & \text{if } x>c_0   \\
+0, & \text{if } x\leq c_0
+\end{cases}
+$$
+
+the initial boundary value problem IBVP is transformed to an Initial Value Problem IVP as follows:
+
+$$
+\begin{cases}
+  u_t = \frac{1}{2} u_{xx} \\
+  u(x, 0) =
+  \begin{cases}
+    1,  & \text{if } x>c_0               \\
+    0,  & \text{if } -c_0 \leq x \leq c_0 \\
+    -1, & \text{if } x<-c_0   
+  \end{cases}
+\end{cases}
+$$
+Then the general solution is given by:
+
+$$
+\begin{aligned}
+  u(x, t)
+  &= \frac{1}{\sqrt{4 \pi a t}} \int_{-\infty}^\infty \exp \left( \frac{-\xi^2}{4at} \right) f(x-\xi) d\xi
+\end{aligned}
+$$
+then, noting that:
+$$
+f(x - \xi) =
+  \begin{cases}
+    -1, & \text{if } \xi > c_0 + x   \\
+    0,  & \text{if } x - c_0 \leq \xi \leq \ x + c_0  \\
+    1,  & \text{if } \xi < x - c_0            \\
+  \end{cases}
+$$
+then
+
+$$
+\begin{aligned}
+  u(x, t)
+  &= \frac{1}{\sqrt{2 \pi  t}} \int_{-\infty}^\infty \exp \left( \frac{-\xi^2}{2t}f(x-\xi) \right) d\xi \\
+  &= \frac{1}{\sqrt{2 \pi  t}} \left(
+    \int_{-\infty}^{x-c_0} \exp \left( \frac{-\xi^2}{2t} \right) d\xi
+  + \int_{x+c_0}^{\infty} \exp \left( \frac{-\xi^2}{2t} \right) d\xi
+  \right) \\
+  &= 1 + F_X(x-c_0) - F_X(x+c_0) 
+  &\text{for } X \sim \Nd(0,\sqrt{t}) \\
+  &= 1 + \frac{1}{2} \left(1  + \erf \left( \frac{x - c_0}{\sqrt{2t}} \right) \right)
+   - \frac{1}{2} \left(1  + \erf \left( \frac{x + c_0}{\sqrt{2t}} \right) \right) \\
+  &= 1 + \frac{1}{2} \left(\erf \left( \frac{x - c_0}{\sqrt{2t}} \right) - \erf \left( \frac{x + c_0}{\sqrt{2t}} \right) \right)
+\end{aligned}
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
