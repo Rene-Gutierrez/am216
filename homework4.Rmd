@@ -1,0 +1,231 @@
+---
+title: "Homework 4"
+author: "Rene Gutierrez"
+date: "4/25/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\dF}{\mathbb{F}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\gss}{\sigma^2}
+
+## Homework 4
+
+### Problem 1
+
+We have that the Fourier transform is given by:
+
+$$
+\begin{aligned}
+  \dF[e^{b|t|}] 
+    &= \int_{-\infty}^{\infty} e^{-\beta|t|}e^{-2 \pi i t \xi}dt \\
+    &= \int_{-\infty}^{0} e^{\beta t }e^{-2 \pi i t \xi}dt + \int_{0}^{\infty} e^{-\beta t}e^{-2 \pi i t \xi}dt \\
+    &= \int_{-\infty}^{0} e^{\beta t -2 \pi i t \xi}dt + \int_{0}^{\infty} e^{-\beta t -2 \pi i t \xi}dt \\
+    &= \int_{-\infty}^{0} e^{t (\beta -2 \pi i \xi)}dt + \int_{0}^{\infty} e^{t(-\beta -2 \pi i \xi)}dt \\
+    &= \left[\frac{e^{t (\beta -2 \pi i \xi)}}{(\beta -2 \pi i \xi)} \right|_{-\infty}^{0} 
+     + \left[\frac{e^{t (-\beta -2 \pi i \xi)}}{(-\beta -2 \pi i \xi)} \right|_{0}^{\infty} \\
+    &= \frac{1}{(\beta -2 \pi i \xi)} - \frac{1}{(-\beta -2 \pi i \xi)} \\
+    &= \frac{\beta + 2 \pi i \xi + \beta -2 \pi i \xi}{(\beta -2 \pi i \xi)(\beta + 2 \pi i \xi)} \\
+    &= \frac{2 \beta}{\beta^2 - (2 \pi i \xi)^2} \\
+    &= \frac{2 \beta}{\beta^2 + (2 \pi \xi)^2} \\
+\end{aligned}
+$$
+
+### Problem 2
+
+Suppose that $t>=s$. Then consider two cases:
+
+If $t-s>h$ then $t>s+h>s$ and then $W(t + h) - W(t)$ and $W(s + h) - W(s)$ are independent. Then: 
+
+$$
+\begin{aligned}
+  \dE[(W(t + h) - W(t))(W(s + h) - W(s))]
+    &= \dE[(W(t + h) - W(t))] \dE[(W(s + h) - W(s))] \\
+    &= 0
+\end{aligned}
+$$
+Now if $t-s=<h$ then we have that:
+
+$$
+\begin{aligned}
+  \dE[
+    &(W(t + h) - W(t))(W(s + h) - W(s))] \\
+    &= \dE[(W(t + h) - W(s + h) + W(s + h) - W(t))(W(s + h) - W(s))] \\
+    &= \dE[(W(t + h) - W(s + h))(W(s + h) - W(s)) + (W(s + h) - W(t))(W(s + h) - W(s))] \\
+    &= \dE[(W(t + h) - W(s + h))] \dE[(W(s + h) - W(s))] + \dE[(W(s + h) - W(t))(W(s + h) - W(s))] \\
+    &= \dE[(W(s + h) - W(t))(W(s + h) - W(s))] \\
+    &= \dE[(W(s + h) - W(t))(W(s + h) - W(t) + W(t) - W(s))] \\
+    &= \dE[(W(s + h) - W(t))(W(s + h) - W(t)) + (W(s + h) - W(t))(W(t) - W(s))] \\
+    &= \dE[(W(s + h) - W(t))^2] + \dE[(W(s + h) - W(t))] \dE[(W(t) - W(s))] \\
+    &= \dE[(W(s + h) - W(t))^2] \\
+    &=\dV[W(s + h) - W(t)] \\
+    &= s + h - t   \\
+    &= h - (t - s) \\
+\end{aligned}
+$$
+Then by symmetry we can consider the respective cases if $s>t$. Then:
+
+$$
+\dE[(W(t + h) - W(t))(W(s + h) - W(s))] = 
+\begin{cases}
+0           & \text{if} \quad |t-s| > h   \\
+h - |t - s| & \text{if} \quad |t-s|\leq h
+\end{cases}
+$$
+
+### Problem 3
+
+Let $\epsilon>0$, then since:
+
+$$ \lim_{N \to \infty} \dE[Q_N(\omega)] = 0 $$
+there exists $N_1$ such that:
+
+$$ |\dE[Q_N(\omega)]| < \frac{\epsilon}{2} \quad \forall N \geq N_1$$
+Now
+
+$$
+\begin{aligned}
+|Q_N(\omega)| 
+  &= |Q_N(\omega) - \dE[Q_N(\omega)] + \dE[Q_N(\omega)]| \\
+  & \leq |Q_N(\omega) - \dE[Q_N(\omega)]| + |Q_N(\omega)| \\
+  & < |Q_N(\omega) - \dE[Q_N(\omega)]| + \frac{\epsilon}{2}
+\end{aligned}
+$$
+then we have that $\forall N \geq N_1$:
+
+$$
+\begin{aligned}
+\dP(|Q_N(\omega)| > \epsilon)
+  &< \dP(|Q_N(\omega) - \dE[Q_N(\omega)]| + \frac{\epsilon}{2} > \epsilon) \\
+  &= \dP(|Q_N(\omega) - \dE[Q_N(\omega)]| > \frac{\epsilon}{2})            \\
+  &< \dP(|Q_N(\omega) - \dE[Q_N(\omega)]| > \epsilon)                      \\
+  &\leq \frac{\dE[(Q_N(\omega) - \dE[Q_N(\omega))^2]}{\epsilon^2} & \text{by Markov's Inequality} \\
+  &\leq \frac{\dV[Q_N(\omega)]}{\epsilon^2}          \\
+\end{aligned}
+$$
+Now, since 
+
+$$ \lim_{N \to \infty} \frac{\dV[Q_N(\omega)]}{\epsilon^2} = 0 $$
+
+there exits $N_2$ such that
+
+$$ \dV[Q_N(\omega)] < \epsilon^3 \quad \forall N\geq N_2  $$
+then if $N\geq \max\{N_1, N_2\}$ we have that:
+
+$$ \dP(|Q_N(\omega)| > \epsilon) \leq \frac{\dV[Q_N(\omega)]}{\epsilon^2} < \frac{\epsilon^3}{\epsilon^2} = \epsilon $$
+
+therefore:
+
+
+$$ \lim_{N \to \infty} \dP(|Q_N(\omega)| > \epsilon) = 0 $$
+
+### Problem 4
+
+Let
+
+$$ Q_N \equiv \sum_{j=0}^{N-1} \left( \frac{1}{2}f(W(s_j)) + \frac{1}{2}f(W(s_{j+1})) - f(W(s_{j + 1/2})) \right) \Delta W_j $$
+where:
+
+$$ \Delta s = \frac{t}{N}, \quad s_j = j \Delta s, \quad s_{j+1/2} = \frac{s_j + s_{j+1}}{2}, \quad \Delta W_j = W(s_{j+1} - W(s_j))  $$
+and
+
+$$ W_j = W(s_j), \quad W_{j+1} = W(s_{j+1}), \quad W_{j + 1/2} = W(s_{j+1/2}) $$
+$$ \Delta W_j = W_{j+1} - W_j, \quad \Delta W^+_j = W_{j+1} - W_{j+1/2}, \quad \Delta W^-_j = W_{j+1/2} - W_{j} $$
+$$ f_j = f(W_j), \quad f_j'(W_j), \quad f_{j+1} = f(W_{j+1}), \quad f_{j+1}'(W_{j+1}), \quad f_{j+1/2} = f(W_{j+1/2}), \quad f_{j+1/2}'(W_{j+1/2})$$
+Then we have that:
+
+$$Q_N \equiv \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j + \frac{1}{2}f_{j+1} - f_{j + 1/2} \right) \Delta W_j$$
+
+Now using a taylor approximation we have that:
+
+$$ f_{j+1} = f(W_j + \Delta W_j) = f_j + f_j' \Delta W_j + \cO((\Delta W_j)^2) = f_j + f_j' \Delta W_j + \cO(\Delta s) $$
+similarly,
+
+$$ f_{j+1/2} = f(W_j/2 + \Delta W_j^-) = f_j + f_j' \Delta W_j^- + \cO((\Delta W_j^-)^2) = f_j + f_j' \Delta W_j^- + \cO(\Delta s) $$
+then:
+
+$$
+\begin{aligned}
+Q_N 
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j + \frac{1}{2}(f_j + f_j' \Delta W_j + \cO(\Delta s)) - f_j - f_j' \Delta W_j^- - \cO(\Delta s)   \right) \Delta W_j \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' \Delta W_j - f_j' \Delta W_j^- + \cO(\Delta s)   \right) \Delta W_j \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' (\Delta W_j - 2 \Delta W_j^-) + \cO(\Delta s)   \right) \Delta W_j \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' (W_{j+1} - W_j - 2(W_{j+1/2} - W_j)) + \cO(\Delta s)   \right) \Delta W_j \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' (W_{j+1} - W_{j+1/2} - (W_{j+1/2} - W_j)) + \cO(\Delta s) \right) (\Delta W_j^+ + \Delta W_j^-) \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' (\Delta W_j^+ - \Delta W_j^-) + \cO(\Delta s) \right) (\Delta W_j^+ + \Delta W_j^-) \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) + \cO(\Delta s) \Delta W_j \right) \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) + o(\Delta s) \right) \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) \right) + o(1)  \\
+\end{aligned}
+$$
+then we have that:
+
+$$
+\begin{aligned}
+\dE[Q_N] 
+  &= \dE \left[ \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) \right) + o(1) \right] \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' (\dE[(\Delta W_j^+)^2] - \dE[(\Delta W_j^-)^2]) \right) + o(1)          \\
+  &= \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' (\frac{\Delta s}{2} - \frac{\Delta s}{2}) \right) + o(1)          \\
+  &= o(1)          \\
+\end{aligned}
+$$
+
+therefore
+
+$$ \lim_{N \to \infty} \dE[Q_N] = 0 $$
+
+### Problem 5
+
+Considering the results from the previous exercise we have that:
+
+$$
+\begin{aligned}
+Q_N^2 
+  &= \left( \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) \right) + o(1)  \right)
+     \left( \sum_{j=0}^{N-1} \left( \frac{1}{2}f_j' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) \right) + o(1)  \right) \\
+  &= \frac{1}{4}\sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \left( f_j'f_k' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) ((\Delta W_k^+)^2 - (\Delta W_k^-)^2) \right) + o(1) \\
+\end{aligned}
+$$
+Now, note that $\forall k \neq j$ we have that $\Delta W_j^+ \perp \Delta W_k^+$, $\Delta W_j^+ \perp \Delta W_k^-$, $\Delta W_j^- \perp \Delta W_k^+$ and $\Delta W_j^- \perp \Delta W_k^-$. Then $\forall k \neq j$, we have that:
+
+$$
+\begin{aligned}
+\dE
+ & [((\Delta W_j^+)^2 - (\Delta W_j^-)^2) ((\Delta W_k^+)^2 - (\Delta W_k^-)^2)] \\
+ &= \dE[(\Delta W_j^+)^2 - (\Delta W_j^-)^2)] \dE[(\Delta W_k^+)^2 - (\Delta W_k^-)^2)] \\
+ &= \left(\frac{\Delta s}{2} - \frac{\Delta s}{2} \right) \left(\frac{\Delta s}{2} - \frac{\Delta s}{2} \right) \\
+ &= 0
+\end{aligned}
+$$
+then we have that:
+
+
+$$
+\begin{aligned}
+\dE[Q_N^2] 
+  &= \dE \left[ \frac{1}{4}\sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \left( f_j'f_k' ((\Delta W_j^+)^2 - (\Delta W_j^-)^2) ((\Delta W_k^+)^2 - (\Delta W_k^-)^2) \right) + o(1) \right] \\
+  &= \frac{1}{4}\sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \left( f_j'f_k' \dE[((\Delta W_j^+)^2 - (\Delta W_j^-)^2) ((\Delta W_k^+)^2 - (\Delta W_k^-)^2)] \right) + o(1) \\
+  &= \frac{1}{4}\sum_{j=0}^{N-1} \left( f_j'^2 \dE[((\Delta W_j^+)^2 - (\Delta W_j^-)^2)^2] \right) + o(1) \\
+  &= \frac{1}{4}\sum_{j=0}^{N-1} \left( f_j'^2 \dE[((\Delta W_j^+)^2 - (\Delta W_j^-)^2)^2] \right) + o(1)
+\end{aligned}
+$$
+
+Finally, note that:
+
+$$ ((\Delta W_j^+)^2 - (\Delta W_j^-)^2)^2 = o(1) $$
+
+then:
+
+$$ \dV[Q_N] = \dE[Q_N^2] = o(1) $$
+therefore:
+
+$$ \lim_{N \to \infty} \dV[Q_N] = 0 $$

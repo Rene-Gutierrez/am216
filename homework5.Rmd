@@ -1,0 +1,347 @@
+---
+title:  "Homework 5"
+author: "Rene Gutierrez"
+date:   "5/2/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\dF}{\mathbb{F}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\gss}{\sigma^2}
+
+## Homework 5
+
+### Problem 1
+
+Part i
+
+$$W(t) = \int_0^t dW(s)$$
+
+$$
+\begin{aligned}
+  \int_0^T W(t) dt
+    &= \int_0^T \int_0^t dW(s)dt \\
+    &= \int_0^T \int_s^{T} dt dW(s) \\
+    &= \int_0^T (T - s) dW(s) \\
+\end{aligned}
+$$
+
+Now let
+
+$$ \Delta s = \frac{t}{N}, \quad s_j = j \Delta s, \quad \Delta W_j = W(s_{j+1}) - W(s_j)  $$
+Then:
+
+$$
+\begin{aligned}
+  \int_0^T (T - s) dW(s)
+    &= \lim_{N \to \infty} \sum_{j=0}^{N-1} (T - s_j) (W(s_{j+1}) - W(s_j)) \\
+    &= \lim_{N \to \infty} \sum_{j=0}^{N-1} \left(T - j \frac{T}{N} \right) \Delta W_j \\
+    &= \lim_{N \to \infty} \sum_{j=0}^{N-1} \left(N - j \right) \frac{T}{N} \Delta W_j \\
+\end{aligned}
+$$
+
+Where we have that:
+
+$$ \left(N - j \right) \frac{T}{N} \Delta W_j \sim N \left( 0, (N - j)^2 \frac{T^3}{N^3}  \right) $$
+all of them independent of each other. Then:
+
+$$
+\begin{aligned}
+  \sum_{j=0}^{N-1} \left(N - j \right) \frac{T}{N} \Delta W_j
+    & \sim N \left(0, \sum_{j=0}^{N-1} (N - j)^2 \frac{T^3}{N^3} \right)
+\end{aligned}
+$$
+And
+
+$$
+\begin{aligned}
+  \sum_{j=0}^{N-1} (N - j)^2 \frac{T^3}{N^3}
+    & = \frac{N(N + 1)(2N + 1)}{6} \frac{T^3}{N^3} \\
+    & = \frac{\left(1 + \frac{1}{N} \right) \left(2 + \frac{1}{N} \right)}{6} T^3 \\
+\end{aligned}
+$$
+
+Finally, 
+
+$$
+\begin{aligned}
+  \lim_{N \to \infty} \sum_{j=0}^{N-1} (N - j)^2 \frac{T^3}{N^3} 
+    & = \lim_{N \to \infty} \frac{\left(1 + \frac{1}{N} \right) \left(2 + \frac{1}{N} \right)}{6} T^3 \\
+    & = \frac{T^3}{3}
+\end{aligned}
+$$
+
+Therefore,
+
+$$ \int_0^T W(t) dt \sim N \left(0, \frac{T^3}{3} \right) $$
+
+Part ii
+
+$$
+\begin{aligned}
+  \int_0^T t W(t) dt
+    &= \int_0^T \int_0^t t dW(s)dt \\
+    &= \int_0^T \int_s^{T} t dt dW(s) \\
+    &= \int_0^T \frac{T^2 - s^2}{2} dW(s) \\
+    &= \lim_{N \to \infty} \sum_{j=0}^{N-1} \frac{T^2 - j^2\frac{T^2}{N^2}}{2} \Delta W_j \\
+    &= \lim_{N \to \infty} \sum_{j=0}^{N-1} \frac{N^2 - j^2}{2} \frac{T^2}{N^2} \Delta W_j \\
+\end{aligned}
+$$
+
+Now
+
+$$ \frac{N^2 - j^2}{2} \frac{T^2}{N^2} \Delta W_j \sim \Nd \left( 0, \frac{T^5}{4 N^5} (N^2 - j^2)^2 \right) $$
+
+Now
+
+$$
+\begin{aligned}
+   \sum_{j=0}^{N-1} \frac{T^5}{4 N^5} (N^2 - j^2)^2
+    &= \sum_{j=0}^{N-1} \frac{T^5}{4 N^5} (N^4 - 2 N^2 j^2 + j^4) \\
+    &= \frac{T^5}{4 N^5} (N^5 - 2 N^2 \frac{N(N + 1)(2N + 1)}{6} + \frac{N(N + 1)(2N + 1)(3N^2 + 3N - 1)}{30}) \\
+    &= \frac{T^5}{4} \left(1 - 2 \frac{\left(1 + \frac{1}{N} \right) \left(2 + \frac{1}{N} \right)}{6} 
+     + \frac{1 \left( \frac{1}{N} + 1 \right) \left(2 + \frac{1}{N} \right)\left(3 + \frac{3}{N} - \frac{1}{N^2}\right)}{30} \right) \\
+\end{aligned}
+$$
+
+then
+
+$$
+\begin{aligned}
+   \lim_{N \to \infty} \sum_{j=0}^{N-1} \frac{T^5}{4 N^5} (N^2 - j^2)^2
+    &= \frac{T^5}{4} \left(1 - \frac{2}{3} + \frac{1}{5} \right) \\
+    &= \frac{2 T^5}{15}
+\end{aligned}
+$$
+
+Then
+
+$$ \int_0^T t W(t) dt \sim \Nd \left(0, \frac{2 T^5}{15}\right) $$
+
+### Problem 2
+
+Recall that:
+
+$$ u(z,s) = \dE[u(z + dX, s + ds)] $$
+$$ \dE[dX] = b(z, s) ds + o(ds) $$
+$$ \dE[(dX)^2] = a(z, s)ds + o(ds) $$
+$$ u(z + dX, s + ds) = u_s ds + u_z dX + \frac{1}{2}u_{zz}(dX)^2 + o(ds)$$
+
+Then we have:
+
+$$
+\begin{aligned}
+   u(z,s) 
+     &= \dE[u(z + dX, s + ds)] \\
+     &= \dE[u(z,s) + u_s ds + u_z dX + \frac{1}{2}u_{zz}(dX)^2 + o(ds)]      \\
+     &= u(z,s) + u_s ds + u_z \dE[dX] + \frac{1}{2}u_{zz}\dE[(dX)^2] + o(ds) \\
+     &= u(z,s) + u_s ds + u_z b(z, s) ds + \frac{1}{2}u_{zz}a(z, s)ds + o(ds) \\
+\end{aligned}
+$$
+
+Then:
+
+$$ u_s = -u_z b(z, s) - \frac{1}{2}u_{zz}a(z, s) $$
+Now note that:
+
+$$ u(z,T) = \dP(X(T) \geq x_c \mid X(T) = z ) = \begin{cases}
+1 & \text{if} \quad z \geq x_c \\
+0 & \text{if} \quad z < x_c \\
+\end{cases}$$
+
+which gives us a final value condition.
+
+### Problem 3
+
+#### Part 1
+
+Notice that if $X(s) = z, \quad z>0$, then for $ds$ small enough the probability of $X(s + ds)$ hitting 0 is negligible. Then:
+
+$$ v(z,s) = \dE[v(z + dX, s + ds)] \\ $$
+which will give us the same governing equation as in the previous problem, that is:
+
+$$ v_s = -v_z b(z, s) - \frac{1}{2}v_{zz}a(z, s) $$
+
+Now, recalling since:
+
+$$ b(z,s) = 0 \quad \text{and} \quad a(z,s) = 1  $$
+then we have that:
+
+$$ v_s = -\frac{1}{2}v_{zz} $$
+
+Now, note that:
+
+$$ v(z, T) = \dP(X(T) \geq x_c, X(t) > 0 \quad \forall t\in[T,T] \mid X(T) = z) $$
+
+$$
+\begin{aligned}
+   v(z, T)
+     &= \dP(X(T) \geq x_c, X(t) > 0 \quad \forall t\in[T,T] \mid X(T) = z) \\
+     &= \dP(X(T) \geq x_c,  X(T) > 0 \mid X(T) = z) \\
+     &= \dP(X(T) \geq x_c \mid X(T) = z) \\
+     &= \begin{cases}
+            1 & \text{if} \quad z \geq x_c \\
+            0 & \text{if} \quad z < x_c \\
+          \end{cases}
+\end{aligned}
+$$
+and we also have that:
+
+$$
+\begin{aligned}
+   v(0, s)
+     &= \dP(X(T) \geq x_c, X(t) > 0 \quad \forall t\in[s,T] \mid X(s) = 0) \\
+     &= 0 \\
+\end{aligned}
+$$
+
+#### Part 3
+
+Now lets apply the change of variables
+
+$$ s = T - \tau, \quad \psi(z, \tau) = v(z, T - \tau) $$
+then we have the following IBVP
+
+$$
+\begin{cases}
+\psi_\tau = \frac{1}{2}\psi_{zz} \\
+\psi(z, 0) = \begin{cases}
+            1 & \text{if} \quad z \geq x_c \\
+            0 & \text{if} \quad z < x_c \\
+          \end{cases} \\
+\psi(0, \tau) = 0
+\end{cases}
+$$
+
+which is the same IBVP as homework 5 (for $z>0$).
+
+Then it has solution:
+
+$$
+\begin{aligned}
+  \psi(z, \tau)
+  &= \frac{1}{2} \left(\erf \left( \frac{z - x_c}{\sqrt{2\tau}} \right) + \erf \left( \frac{z + x_c}{\sqrt{2\tau}} \right) \right)
+\end{aligned}
+$$
+and in terms of $v(z, s)$ we have that:
+
+$$
+\begin{aligned}
+  v(z, s)
+  &= \psi(z, \tau) \\
+  &= \psi(z, T - s) \\
+  &= \frac{1}{2} \left(\erf \left( \frac{z - x_c}{\sqrt{2(T-s)}} \right) + \erf \left( \frac{z + x_c}{\sqrt{2(T-s)}} \right) \right)
+\end{aligned}
+$$
+
+### Problem 4
+
+#### Part 1
+
+Again, we have that for $ds$ small enough:
+
+$$ w(z,s) = \dE[w(z + dX, s + ds)] \\ $$
+which give us the same governing equation:
+
+$$ w_s = -\frac{1}{2}w_{zz} $$
+
+#### Part 2
+
+Now in this case we have that:
+
+$$
+\begin{aligned}
+   w(0, s)
+     &= \dP(X(t_1) \geq x_c \quad t_1 \in[s,T], X(t) > 0 \quad \forall t\in[s,T] \mid X(s) = 0) \\
+     &= 0 \\
+\end{aligned}
+$$
+and
+
+$$
+\begin{aligned}
+   w(x_c, s)
+     &= \dP(X(t_1) \geq x_c \quad t_1 \in[s,T], X(t) > 0 \quad \forall t\in[s,T] \mid X(s) = x_c) \\
+     &= 1
+\end{aligned}
+$$
+
+#### Part 3
+
+Now lets apply the change of variables
+
+$$ s = T - \tau, \quad \psi(z, \tau) = w(z, T - \tau) $$
+
+then, we have the following IBVP:
+
+$$
+\begin{cases}
+\psi_\tau = \frac{1}{2}\psi_{zz} \\
+\psi(x_c, \tau) = 1 \\
+\psi(0,   \tau) = 0
+\end{cases}
+$$
+
+### Problem 5
+
+Then the general solution is given by:
+
+$$
+\begin{aligned}
+  \phi(x, \tau)
+  &= \frac{1}{\sqrt{2 \pi \tau}} \int_{-\infty}^\infty \exp \left( \frac{-\xi^2}{2\tau} \right) f(x-\xi) d\xi
+\end{aligned}
+$$
+
+with:
+
+$$
+f(x - \xi) =
+  \begin{cases}
+    1, & \text{if } \xi \leq z - x_c   \\
+    0,& \text{if }  \xi > z - x_c
+  \end{cases}
+$$
+
+then, we have that:
+
+$$
+\begin{aligned}
+  \phi(x, \tau)
+  &= \frac{1}{\sqrt{2 \pi \tau}} \int_{-\infty}^{z - x_c} \exp \left( \frac{-\xi^2}{2\tau} \right) d\xi \\
+  &= F_X(z-x_c) & \text{with } X \sim \Nd(0,\tau) \\
+  &= \frac{1}{2} + \frac{1}{2}\erf \left( \frac{z - x_c}{\sqrt{2 \tau}} \right) \\
+\end{aligned}
+$$
+
+#### Part 2
+
+Now in terms of $u(z, s)$, we have that:
+
+$$
+\begin{aligned}
+  u(z, s)
+  &= \phi(z, \tau) \\
+  &= \phi(z, T - s) \\
+  &= \frac{1}{2} + \frac{1}{2}\erf \left( \frac{z - x_c}{\sqrt{2(T-s)}} \right)
+\end{aligned}
+$$
+ comparing this solution, with $v(z, s)$, we have that:
+ 
+ $$ u(z,s) \geq v(z,s), \quad \text{since} \quad \erf \left( \frac{z + x_c}{\sqrt{2(T-s)}} \right) \leq 1 $$
+
+which is to be expected.
+
+
+
+
+
