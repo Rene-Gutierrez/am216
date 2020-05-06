@@ -164,10 +164,8 @@ proIn    <- sum(inConInt) / M
 
 ```
 
-<<<<<<< HEAD
 The estimate of the probability that the approximate 95\% confidence interval contains $\mu^{true}$ is: `r proIn`.
-=======
-The estimate of the probability that the approximate 95\% confidence interval contains $\mu^{true}$ is: `r proIn`.
+
 
 
 

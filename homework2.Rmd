@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 \newcommand{\gss}{\sigma^2}
 
 
-## Homework 1
+## Homework 2
 
 ### Problem 1
 
@@ -236,13 +236,13 @@ $$
   &= \frac{1}{\sqrt{2 \pi  t}} \int_{-\infty}^\infty \exp \left( \frac{-\xi^2}{2t}f(x-\xi) \right) d\xi \\
   &= \frac{1}{\sqrt{2 \pi  t}} \left(
     \int_{-\infty}^{x-c_0} \exp \left( \frac{-\xi^2}{2t} \right) d\xi
-  + \int_{x+c_0}^{\infty} \exp \left( \frac{-\xi^2}{2t} \right) d\xi
+  - \int_{x+c_0}^{\infty} \exp \left( \frac{-\xi^2}{2t} \right) d\xi
   \right) \\
-  &= 1 + F_X(x-c_0) - F_X(x+c_0) 
+  &= F_X(x-c_0) - 1 + F_X(x+c_0) 
   &\text{for } X \sim \Nd(0,\sqrt{t}) \\
-  &= 1 + \frac{1}{2} \left(1  + \erf \left( \frac{x - c_0}{\sqrt{2t}} \right) \right)
-   - \frac{1}{2} \left(1  + \erf \left( \frac{x + c_0}{\sqrt{2t}} \right) \right) \\
-  &= 1 + \frac{1}{2} \left(\erf \left( \frac{x - c_0}{\sqrt{2t}} \right) - \erf \left( \frac{x + c_0}{\sqrt{2t}} \right) \right)
+  &= \frac{1}{2} \left(1  + \erf \left( \frac{x - c_0}{\sqrt{2t}} \right) \right)
+   + \frac{1}{2} \left(1  + \erf \left( \frac{x + c_0}{\sqrt{2t}} \right) \right) -1 \\
+  &= \frac{1}{2} \left(\erf \left( \frac{x - c_0}{\sqrt{2t}} \right) + \erf \left( \frac{x + c_0}{\sqrt{2t}} \right) \right)
 \end{aligned}
 $$
 

@@ -1,0 +1,231 @@
+---
+title:  "Homework 3"
+author: "Rene Gutierrez"
+date:   "4/16/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\gss}{\sigma^2}
+
+
+## Homework 3
+
+### Problem 1
+
+Let us propose a particular solution of the non-homugenous problem as:
+
+$$ T(x) = ax $$
+
+then:
+
+$$ T_{xx}(x) = 0 $$
+
+and
+
+$$ T_x(x) = a $$
+
+which implies that:
+
+$$ -2 m a = -2 $$
+
+then:
+
+$$ a = \frac{1}{m} $$
+
+then
+
+$$ T(x) = \frac{x}{m} $$
+
+is a particular solution for the non-homogeneous problem.
+
+Now the characteristic equation of the homogeneous problem is given by:
+
+$$ y^2 - 2my = 0 $$
+
+which implies:
+
+$$ y(y - 2m) = 0 $$
+
+then the solutions for the homogeneous problem is given by:
+
+$$ T(x) = A + B e^{2mx} $$
+
+then the general solution is given by:
+
+$$ T(x) = \frac{x}{m} + A + B e^{2mx} $$
+Finally, we enforce the boundary conditions to obtain:
+
+$$ 0 = T(0) = A + B $$
+
+$$ 0 = T(C) = \frac{C}{m} + A + Be^{2mC}$$
+then
+$$
+\begin{aligned}
+  A + B = \frac{C}{m} + A + Be^{2mC}
+  & \iff B = \frac{C}{m} + Be^{2mC}    \\
+  & \iff B - Be^{2mC}= \frac{C}{m}     \\
+  & \iff B(1 - e^{2mC})= \frac{C}{m}   \\
+  & \iff B = \frac{C}{m (1 - e^{2mC})}  \\
+\end{aligned}
+$$
+
+and
+
+$$
+\begin{aligned}
+  A + B = 0
+  & \iff A = -\frac{C}{m (e^{2mC} -1)}    \\
+\end{aligned}
+$$
+then the solution is given by:
+
+$$
+\begin{aligned}
+  T(x) = \frac{x}{m} -\frac{C}{m (e^{2mC} -1)}  + \frac{C}{m (e^{2mC} -1)} e^{2mx} \\
+  T(x) = \frac{x}{m} -\frac{C(e^{2mx} - 1)}{m (e^{2mC} -1)} \\
+\end{aligned}
+$$
+
+### Problem 2
+
+$$ \dE[X^2] = \dV[X] + \dE[X]^2 = \dV[X] = \gss$$
+Notice that $X = \sigma Y$, with $Y\sim\Nd(0,1)$. And
+
+$$\phi_Y(t) = \exp \left(-\frac{t^2}{2} \right)$$
+then
+$$\phi_Y^{(1)}(t) = -\exp \left(-\frac{t^2}{2} \right)t$$
+$$\phi_Y^{(2)}(t) = -\exp \left(-\frac{t^2}{2} \right) + \exp \left(-\frac{t^2}{2} \right) t^2$$
+$$\phi_Y^{(3)}(t) = \exp \left(-\frac{t^2}{2} \right) t + 2 \exp \left(-\frac{t^2}{2} \right) t - \exp \left(-\frac{t^2}{2} \right) t^3 = 3 \exp \left(-\frac{t^2}{2} \right) t - \exp \left(-\frac{t^2}{2} \right) t^3$$
+$$\phi_Y^{(4)}(t) = 3 \exp \left(-\frac{t^2}{2} \right) - 3 \exp \left(-\frac{t^2}{2} \right) t^2  - 3 \exp \left(-\frac{t^2}{2} \right) t^2 + \exp \left(-\frac{t^2}{2} \right) t^4 = 3 \exp \left(-\frac{t^2}{2} \right) - 6 \exp \left(-\frac{t^2}{2} \right) t^2 + \exp \left(-\frac{t^2}{2} \right) t^4 $$
+then we have that:
+
+$$ \dE[Y^4] = i^{-4} \phi_Y^{(4)}(0) = 3$$
+
+then:
+
+$$ \dV[Y^2] = \dE[Y^4] - \dE[Y^2]^2 = 3 - 1 = 2 $$
+Finally,
+$$ \dV[X^2] = \dV[(\sigma Y)^2] = \sigma^4 \dV[Y^2] = 2 \sigma^4 $$
+
+### Problem 3
+
+Notice that:
+
+$$ \dE[\Delta W_k] = 0, \quad \dE[(\Delta W_k)^2] = \frac{T}{N} \quad \forall k \in {0,...,N-1} $$
+Furthermore, each increment is independent from the other, then:
+$$ \dE[(\Delta W_j)^2 (\Delta W_i)^2] = 0 \quad \forall i \neq j $$
+Then
+$$
+\begin{aligned}
+  \dE[Q_N]
+    &= \dE \left[ \sum_{k=0}^{N-1} (\Delta W_k)^2 \right] \\
+    &= \sum_{k=0}^{N-1} \dE \left[ (\Delta W_k)^2 \right] \\
+    &= \sum_{k=0}^{N-1} \frac{T}{N} \\
+    &= T
+\end{aligned}
+$$
+and
+
+$$
+\begin{aligned}
+  \dV[Q_N]
+    &= \dV \left[ \sum_{k=0}^{N-1} (\Delta W_k)^2 \right] \\
+    &= \sum_{k=0}^{N-1} \dV \left[ (\Delta W_k)^2 \right] &\text{by independence} \\
+    &= \sum_{k=0}^{N-1} 2 \frac{T^2}{N^2} \\
+    &= \frac{2T^2}{N}
+\end{aligned}
+$$
+
+### Problem 4
+
+Let
+$$L := \text{Leukemia}$$
+$$+ := \text{Tested Positive}$$
+$$- := +^c = \text{Tested Negative}$$
+Then by Bayes Theorem we have that:
+
+$$
+\begin{aligned}
+  \dP(L \mid +)
+    &= \frac{\dP(+ \mid L) \dP(L)}{\dP(+)}
+\end{aligned}
+$$
+
+Now
+
+```{r Bayes Leukemia}
+pL  <- 0.00076
+rFP <- 0.005
+rFN <- 0.05
+pP  <- ((1 - 0.05) * pL + rFP * (1- pL))
+pLP <- (1 - 0.05) * pL / pP
+pNN <- (1 - 0.005) * (1 - pL) / (1 - pP)
+pFP <- rFP * (1 - pL)
+pFN <- rFN * pL
+n   <- 100000
+```
+
+$$ \dP(+) = \dP(+ \mid L) \dP(L) + \dP(+ \mid L^c) \dP(L^c)$$
+then $\dP(+)$ = `r pP` and $\dP(L \mid +)$ = `r pLP`.
+
+Simialarly,
+
+$$
+\begin{aligned}
+  \dP(L^c \mid -)
+    &= \frac{\dP(- \mid L^c) \dP(L^c)}{\dP(-)}
+\end{aligned}
+$$
+Now, $\dP(-)=1 - \dP(+) =$ `r 1 - pP`, then $\dP(L^c \mid -) =$ `r pNN`.
+
+Now notice that $p_{FP} = \dP(+ \cap L^c) = \dP(+ \mid L^c) \dP(L^c) =$ `r pFP` and $p_{FN} = \dP(- \cap L) = \dP(- \mid L) \dP(L) =$ `r pFN`.
+
+And also notice that
+
+$$ N_{FP} \sim \Bd(n, p_{FP})$$
+$$ N_{FN} \sim \Bd(n, p_{FN})$$
+then $\dE[N_{FP}] =$ `r pFP * n` and $\dE[N_{FN}] =$ `r pFN * n`.
+
+### Problem 5
+
+Using Bayes Theorem we have that:
+
+$$
+\begin{aligned}
+  \dP(W(t_1) = x 
+    & \mid W(t_1 + t_2) = y_2, W(t_1 + t_2 + t_3) = y_3 )                         \\
+    & \propto \dP(W(t_1 + t_2 + t_3) = y_3 \mid W(t_1 + t_2) = y_2,  W(t_1) = x) 
+      \dP(W(t_1) = x \mid W(t_1 + t_2) = y_2)                                     \\
+    & \propto \dP(W(t_1 + t_2 + t_3) = y_3 \mid W(t_1 + t_2) = y_2) 
+      \dP(W(t_1) = x \mid W(t_1 + t_2) = y_2)                                     \\
+    & \propto \dP(W(t_1) = x \mid W(t_1 + t_2) = y_2)
+\end{aligned}
+$$
+therefore
+$$ \dP(W(t_1) = x \mid W(t_1 + t_2) = y_2, W(t_1 + t_2 + t_3) = y_3 ) = \dP(W(t_1) = x \mid W(t_1 + t_2) = y_2) $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
