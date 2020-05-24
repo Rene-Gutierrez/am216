@@ -287,7 +287,8 @@ $$
 \begin{cases}
 \psi_\tau = \frac{1}{2}\psi_{zz} \\
 \psi(x_c, \tau) = 1 \\
-\psi(0,   \tau) = 0
+\psi(0,   \tau) = 0 \\
+\psi(z,0) = 0 & \text{for } z \in (0, x_c)
 \end{cases}
 $$
 
