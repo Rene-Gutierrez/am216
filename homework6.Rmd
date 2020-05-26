@@ -1,0 +1,218 @@
+---
+title:  "Homework 6"
+author: "Rene Gutierrez"
+date:   "5/10/2020"
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\dF}{\mathbb{F}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\gss}{\sigma^2}
+
+## Homework 6
+
+### Problem 1
+
+By definition we have that:
+
+$$
+\begin{aligned}
+  \langle u, L*_z[v] \rangle
+    &= \int \left(b(z) \frac{\partial u}{\partial z} + \frac{1}{2}a(z)\frac{\partial^2 u}{\partial z^2} \right) v(z) dz \\
+    &= \int \left(b(z) \frac{\partial u}{\partial z} \right) v(z) dz 
+      + \frac{1}{2} \int \left(a(z)\frac{\partial^2 u}{\partial z^2} \right) v(z) dz \\
+    &= \int \frac{\partial u}{\partial z} \left(b(z) v(z)  \right)  dz 
+      + \frac{1}{2} \int \frac{\partial^2 u}{\partial z^2} \left(a(z) v(z) \right)  dz \\
+\end{aligned}
+$$
+
+Now, using integration by parts we have that:
+
+$$
+\begin{aligned}
+  \int \frac{\partial u}{\partial z} \left(b(z) v(z)  \right)  dz 
+  &= -\int u(z) \frac{\partial}{\partial z} \left(b(z) v(z)  \right) dz \\
+\end{aligned}
+$$
+Similarly, using integration by parts twice (or following the class notes) we have that:
+
+$$ \int \frac{\partial^2 u}{\partial z^2} \left(a(z) v(z) \right)  dz = \int u(z) \frac{\partial^2}{\partial z^2}(a(z)v(z))dz $$
+then we have that:
+
+$$
+\begin{aligned}
+  \langle u, L*_z[v] \rangle
+    &= -\int u(z) \frac{\partial}{\partial z} \left(b(z) v(z)  \right) dz
+      + \frac{1}{2}\int u(z) \frac{\partial^2}{\partial z^2}(a(z)v(z))dz \\
+    &= \int u(z) \left( -\frac{\partial}{\partial z} \left(b(z) v(z)  \right) + \frac{1}{2} \frac{\partial^2}{\partial z^2}(a(z)v(z)) \right) dz \\
+    &= \langle u, -\frac{\partial}{\partial z} \left(b(z) v(z)  \right) + \frac{1}{2} \frac{\partial^2}{\partial z^2}(a(z)v(z)) \rangle
+\end{aligned}
+$$
+
+Then:
+
+$$ L*_z = -\frac{\partial}{\partial z} \left(b(z) \cdot  \right) + \frac{1}{2} \frac{\partial^2}{\partial z^2}(a(z) \cdot) $$
+
+### Problem 2
+
+$$ u(x, t) = \dE[u(x + dX, t - dt)] $$
+$$ \dE[dX] = b(x, t) ds + o(dt) $$
+$$ \dE[(dX)^2] = a(x, t)ds + o(dt) $$
+$$ u(x + dX, t - dt) = u(x,t) -u_t dt + u_x dX + \frac{1}{2}u_{xx}(dX)^2 + o(dt)$$
+
+Then we have:
+
+$$
+\begin{aligned}
+   u(x,t) 
+     &= \dE[u(x + dX, t - dt)] \\
+     &= \dE[u(x,t) - u_t dt + u_t dX + \frac{1}{2}u_{xx}(dX)^2 + o(dt)]      \\
+     &= u(x,t) - u_t dt + u_x \dE[dX] + \frac{1}{2}u_{xx}\dE[(dX)^2] + o(dt) \\
+     &= u(x,t) - u_t dt + u_x b(x, t) dt + \frac{1}{2}u_{xx}a(x, t)dt + o(dt) \\
+\end{aligned}
+$$
+Then:
+
+$$ u_t = b(x, t) u_x  + \frac{1}{2}a(x, t)u_{xx} $$
+
+### Problem 3
+
+We have that the homogeneous solution is given by:
+
+$$ T_h(x) = C_1 + C_2 e^{-2bx} $$
+
+while a particular solution is given by:
+
+$$ T_p(x) = -\frac{x}{b} $$
+Then we have that the solution is given by:
+
+$$ T(x) = -\frac{x}{b} + C_1 + C_2 e^{-2bx} $$
+which implies:
+
+$$ T'(x) = -\frac{1}{b} - 2bC_2e^{-2bx}$$
+so we can apply the boundary conditions to obtain:
+
+$$
+\begin{aligned}
+   T'(L_1) 
+     &= -\frac{1}{b}-2bC_2 e^{-2bL_1}
+\end{aligned}
+$$
+which implies:
+
+$$ C_2 = - \frac{1}{2b^2}e^{2bL_1}  $$
+Now using the other boundary condition we have that:
+
+$$ T(L_2) = -\frac{L2}{b} + C_1 - \frac{1}{2b^2}e^{2b(L_1 - L_2)} $$
+
+which implies:
+
+$$ C_1 = \frac{L_2}{b} + \frac{1}{2b^2}e^{2b(L_1 - L_2)}$$
+
+putting all toghether we have:
+
+$$
+\begin{aligned}
+   T(x) 
+     &= -\frac{x}{b} + \frac{L_2}{b} + \frac{1}{2b^2}e^{2b(L_1 - L_2)} - \frac{1}{2b^2}e^{2b(L_1 - x)} \\
+     &= \frac{1}{b}(L_2 - x) - \frac{1}{2b^2}e^{-2b(L_2 - L_1)} \left(-1 + e^{2b(L_1 - x -L_1 + L_2)}\right) \\
+     &= \frac{1}{b}(L_2 - x) - \frac{1}{2b^2}e^{-2b(L_2 - L_1)} \left(e^{2b(L_2 - x)} - 1\right) \\
+\end{aligned}
+$$
+
+### Problem 4
+
+Let $p(y,T \mid x, T-t)$ the transition density of $X(T) = y \mid X(T-t) = x$, then, since $X(t)$ is an Ornstein-Uhlenbeck process, we have that:
+
+$$ X(T) \mid X(T-t) = x \sim \Nd \left( e^{-\beta(T - T + t)}x, \frac{\gamma^2}{2 \beta} \left(1 - e^{-2\beta(T - T + t)} \right) \right)$$
+
+That is:
+
+$$ X(T) \mid X(T-t) = x \sim \Nd \left( e^{-t}x, \frac{1}{2} \left(1 - e^{-2t} \right) \right)$$
+
+On the other hand we have:
+
+$$
+\begin{aligned}
+   q(x,t) 
+    &= \dE[u(X(T)) \mid X(T-t) = x] \\
+    &= \int_{-\infty}^\infty u(y) p(y,T \mid x, T-t) dy \\
+    &= \int_{x_c}^\infty p(y,T \mid x, T-t) dy          \\
+    &= 1 - F_{X(T)}(x_c)                                \\
+    &= 1 - \frac{1}{2} \erf \left(\frac{x_c - e^{-t}x}{\sqrt{1 - e^{-2t}}}\right)
+\end{aligned}
+$$
+
+### Problem 5
+
+#### Part 1
+
+Consider the $n$-dimensional sphere of radius $R$:
+
+$$ S(R;n) \equiv \left\{ (x_1, \ldots, x_n) \mid \sum_{i=1}^n x_i^2 = R^2 \right\} $$
+with area
+
+$$ A(R;n) = C(n) R^{n-1} $$
+
+where $C(n)$ is a constant that depends only on $n$.
+
+The cross-section of $S(R;n)$ at $x_1 = y_1$ is a lower dimensional sphere:
+
+$$ S(r(y_1);n-1) \quad \text{with} \quad r(y) = \sqrt{R^2-y^2} $$
+
+then the section of $S(R;n)$ in the range $y_1 \leq x_1 \leq y_1 + dy$ is a strip in the $(n-1)$-dimensional sphere with a width of:
+
+$$ \sqrt{(r'(y_1)dy)^2 + (dy)^2} = \frac{R dy}{\sqrt{R^2-y_1^2}} $$
+Therefore the area of the strip $A(R;y_1,dy)$ is given by:
+
+$$
+\begin{aligned}
+   A(R;y_1,dy) 
+    &= A \left( \sqrt{R^2 - y^2_1} ; n-1 \right) \frac{R dy}{\sqrt{R^2-y_1^2}} \\
+    &= C(n-1) (R^2 - y^2_1)^{\frac{n-2}{2}} \frac{R dy}{\sqrt{R^2-y_1^2}} \\
+    &\propto (R^2 - y^2_1)^{\frac{n-3}{2}} dy\\
+    &\propto \left(1 - \frac{y^2_1}{R^2} \right)^{\frac{n-3}{2}} dy
+\end{aligned}
+$$
+Therefore
+
+$$ \rho_{Y_1}(y_1) \propto \left(1 - \frac{y^2_1}{N} \right)^{\frac{N-3}{2}} $$
+
+#### Part 2
+
+$$ \rho_{Y_1}(y_1) = C \left(1 + \frac{-\frac{y^2_1}{2}}{\frac{N}{2}} \right)^{\frac{N}{2}} \left(1 - \frac{y^2_1}{N} \right)^{\frac{-3}{2}} $$
+
+Now
+
+$$ \lim_{N \to \infty} \left(1 + \frac{-\frac{y^2_1}{2}}{\frac{N}{2}} \right)^{\frac{N}{2}} = \exp \left( -\frac{y^2_1}{2} \right) $$
+
+and
+
+$$ \lim_{N \to \infty} \left(1 - \frac{y^2_1}{N} \right)^{\frac{-3}{2}}  = 1 $$
+
+then:
+
+$$ \lim_{N \to \infty} \rho_{Y_1}(y_1)  = C \exp \left( -\frac{y^2_1}{2} \right) \propto \exp \left( -\frac{y^2_1}{2} \right) $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
