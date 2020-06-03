@@ -1,0 +1,336 @@
+---
+title:  "Homework 8"
+author: "Rene Gutierrez"
+date:   "5/29/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\erfc}{\text{erfc}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\dF}{\mathbb{F}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\gss}{\sigma^2}
+
+## Homework 8
+
+### Problem 1
+
+#### Part 1
+
+Note that:
+
+$$
+\begin{aligned}
+  \dE[|X(t)|]
+    &= \dE\left[\left|\exp \left(\alpha W(t) - \frac{\alpha^2t}{2}\right)\right|\right] \\
+    &= \dE\left[\exp \left(\alpha W(t) - \frac{\alpha^2t}{2}\right)\right] \\
+\end{aligned}
+$$
+Now note that
+
+$$ W(t) \sim \Nd (0,t) \quad \forall t \in [0,\infty) $$
+Then we have that:
+
+$$
+\begin{aligned}
+  \dE[|X(t)|]
+    &= \dE\left[\exp \left(\alpha W(t) - \frac{\alpha^2t}{2}\right)\right] \\
+    &= \exp \left(- \frac{\alpha^2t}{2}\right)\dE\left[\exp \left(\alpha W(t)\right)\right] \\
+    &= \exp \left(- \frac{\alpha^2t}{2}\right) \phi_{W(t)}(\alpha) \\
+    &= \exp \left(- \frac{\alpha^2t}{2}\right) \exp \left(\frac{\alpha^2t}{2}\right) \\
+    &= 1 \\
+    &< \infty
+\end{aligned}
+$$
+
+where $\phi_{W(t)}(\alpha)$ is the moment generating function of $W(t)$. We also have that:
+
+$$
+\begin{aligned}
+  \dE[X(t) \mid X(t_i) = a_i, \quad i \in \{1,\ldots,n\}, \quad t_1 < t_2 < \ldots < t_n < t]
+    &= \dE[X(t) \mid X(t_n) = a_n] 
+\end{aligned}
+$$
+
+since $W(t) \perp W(t_i) \quad \forall i \in \{1,...,n-1\}$ given $W(t_n)$.
+
+Now
+
+$$
+\begin{aligned}
+  X(t_n) = a_n 
+    & \iff a_n = \exp \left(\alpha W(t_n) - \frac{\alpha^2 t_n}{2}\right) \\
+    & \iff log(a_n) = \alpha W(t_n) - \frac{\alpha^2 t_n}{2} \\
+    & \iff W(t_n) = \frac{1}{\alpha} \left[ log(a_n) + \frac{\alpha^2 t_n}{2} \right]
+\end{aligned}
+$$
+
+Now, recalling that
+
+$$ W(t) \mid W(t_n) = c \sim \Nd (c, t-t_n)  $$
+
+we have that
+
+$$
+\begin{aligned}
+  \dE[X(t) \mid X(t_n) = a_n] 
+    &= \dE[X(t) \mid W(t_n) = a_n] \\
+    &= \exp \left(- \frac{\alpha^2t}{2}\right) \dE \left[ \exp(\alpha W(t)) \mid W(t_n) = \frac{1}{\alpha} \left( log(a_n) + \frac{\alpha^2 t_n}{2} \right) \right] \\
+    &= \exp \left(- \frac{\alpha^2t}{2}\right) \phi_{W(t) \mid W(t_n) = \frac{1}{\alpha} \left( log(a_n) + \frac{\alpha^2 t_n}{2} \right)}(\alpha) \\
+    &= \exp \left(- \frac{\alpha^2t}{2}\right) \exp \left(log(a_n) + \frac{\alpha^2t_n}{2} + \frac{\alpha^2 (t - t_n)}{2} \right) \\
+    &=\exp \left(log(a_n) - \frac{\alpha^2t}{2} + \frac{\alpha^2t_n}{2} + \frac{\alpha^2 (t - t_n)}{2} \right) \\
+    &=\exp \left(log(a_n) \right) \\
+    &=a_n
+\end{aligned}
+$$
+
+Therefore $X(t)$ is a Martingale.
+
+#### Part 2
+
+Now consider $X(t) = \exp(W(t))$, let us see that it is not a Martingale.
+
+Note that:
+
+$$
+\begin{aligned}
+  X(t_n) = a_n 
+    & \iff a_n = \exp \left(W(t_n)\right) \\
+    & \iff log(a_n) = W(t_n)
+\end{aligned}
+$$
+
+then:
+
+$$
+\begin{aligned}
+  \dE[X(t) \mid X(t_n) = a_n] 
+    &= \dE[X(t) \mid W(t_n) = a_n] \\
+    &= \dE \left[ \exp(W(t)) \mid W(t_n) =  log(a_n)  \right] \\
+    &= \phi_{W(t) \mid W(t_n) = log(a_n)}(1) \\
+    &= \exp \left(log(a_n) + \frac{(t - t_n)}{2} \right) \\
+    &= a_n \exp \left(\frac{t - t_n}{2} \right) \\
+    &\neq a_n
+\end{aligned}
+$$
+
+Therefore $X(t)$ is not a Martingale.
+
+### Problem 2
+
+$$
+\begin{aligned}
+  dX 
+    &= X(t + dt) -X(t) \\
+    &= C \exp \left(W(t) + dW - \frac{t + dt}{2}\right) - \exp \left(W(t) - \frac{t}{2}\right) \\
+    &= C \exp \left(W(t) - \frac{t}{2}\right)\exp \left(dW - \frac{dt}{2}\right) - \exp \left(W(t) - \frac{t}{2}\right) \\
+    &= C \exp \left(W(t) - \frac{t}{2}\right) \left( \exp \left(dW - \frac{dt}{2}\right) - 1 \right) \\
+    &= X(t) \left( \exp \left(dW - \frac{dt}{2}\right) - 1 \right) \\
+\end{aligned}
+$$
+
+Now
+
+$$
+\begin{aligned}
+  \left(dW - \frac{dt}{2}\right)
+    &= 1 + dW - \frac{1}{2}dt + \frac{1}{2}(dW)^2 + \cO(dt^2) \\
+    &= 1 + dW - \frac{1}{2}dt + \frac{1}{2}dt + \cO(dt^2) \\
+    &= 1 + dW + \cO(dt^2) \\
+\end{aligned}
+$$
+
+then
+
+$$
+\begin{aligned}
+  dX 
+    &= X(t) \left( \exp \left(dW - \frac{dt}{2}\right) - 1 \right) \\
+    &= X(t) \left( 1+ dW - 1 \right) \\
+    &= X(t)dW \\
+    &= \sqrt{X(t)^2}dW
+\end{aligned}
+$$
+
+#### Part 2
+
+Consider
+
+$$ X(t) = C \exp (W(t) - \beta t) $$
+
+then we have that:
+
+$$
+\begin{aligned}
+  dX 
+    &= C \exp (W(t) - \beta t)(-\beta)dt + C\exp (W(t) - \beta t)dW + \frac{1}{2}C\exp (W(t) - \beta t)(dW)^2 \\
+    &= C \exp (W(t) - \beta t)(-\beta)dt + C\exp (W(t) - \beta t)dW + \frac{1}{2}C\exp (W(t) - \beta t)dt \\
+    &= \left(\frac{1}{2} -\beta \right) Xdt + XdW \\
+    &= \left(\frac{1}{2} -\beta \right) Xdt + \sqrt{X^2}dW \\
+\end{aligned}
+$$
+
+Then $b = \frac{1}{2} - \beta \quad \iff \quad \beta = \frac{1}{2} - b$, then the general solution is given by:
+
+$$ X(t) = C \exp \left(W(t) - \left(\frac{1}{2} - b\right)t \right) $$
+
+### Problem 3
+
+Let $Z(t) \sim \Nd(0,1) \quad \forall t$, then
+
+$$ X(t + \Delta t) = X(t) + \sqrt{\Delta t} \sqrt{X(t)^2} Z(t) $$
+
+then
+
+$$
+\begin{aligned}
+  \dP(X(t + \Delta t) \leq 0)
+    &= \dP(X(t) + \sqrt{\Delta t} \sqrt{X(t)^2} Z(t) \leq 0) \\
+    &= \dP\left(Z(t) \leq -\frac{X(t)}{\sqrt{\Delta t} \sqrt{X(t)^2}} \right) \\
+    &= \dP\left(Z(t) \leq -\frac{1}{\sqrt{\Delta t}} \right) \\
+    &= F_{Z(t)} \left(-\frac{1}{\sqrt{\Delta t}} \right) \\
+    &= \frac{1}{2}\left[1 + \erf \left( \frac{-\frac{1}{\sqrt{\Delta t}}}{\sqrt{2}}\right) \right] \\
+    &= \frac{1}{2}\erfc \left(-\frac{1}{\sqrt{2\Delta t}}\right) \\
+\end{aligned}
+$$
+
+#### Part 2
+
+$$
+\begin{aligned}
+  \erfc(z)
+    &= \frac{2}{\sqrt{\pi}} \int_z^\infty e^{-s^2}ds \\
+    &= \frac{2}{\sqrt{\pi}} \int_0^\infty e^{-(z+w)^2}dw \quad \text{where} \quad s = w + z \\
+    &= \frac{2}{\sqrt{\pi}} \int_0^\infty e^{-z^2 - 2zw + w^2}dw \\
+    &= \frac{2}{\sqrt{\pi}} e^{-z^2} \int_0^\infty e^{- 2zw + w^2}dw \\
+    &\leq \frac{2}{\sqrt{\pi}} e^{-z^2} \int_0^\infty e^{- 2zw}dw \\
+    &= \frac{2}{\sqrt{\pi}} e^{-z^2} \left[ -\frac{1}{2z} e^{-zw} \right|_0^\infty \\
+    &= \frac{2}{\sqrt{\pi}} e^{-z^2} \left[ -0 + \frac{1}{2z} \right] \\
+        &= \frac{1}{z\sqrt{\pi}} e^{-z^2} \\
+\end{aligned}
+$$
+
+#### Part 3
+
+Note that
+
+$$ \cup_{i=1}^N \{ X(t_i) \leq 0 \} \implies \min_{1\leq i \leq N} X(t) \leq 0 $$
+
+then we have that:
+
+$$
+\begin{aligned}
+  \dP \left( \min_{1\leq i \leq N} X(t) \leq 0 \right)
+    &\leq \dP \left(\cup_{i=1}^N \{ X(t_i) \leq 0 \} \right) \\
+    &\leq N \dP (X(t_j) \leq 0) \\
+    &\leq N \frac{1}{2} \erfc \left( \frac{1}{\sqrt{2 \Delta t}} \right) \\
+    &\leq \frac{N}{2} \left[ \frac{1}{\frac{1}{\sqrt{2 \Delta t}} \sqrt{\pi}} \exp \left( - \frac{N}{2t} \right) \right] \\
+    &= N \frac{1}{2} \frac{\sqrt{2 \Delta t}}{\sqrt{\pi}} \exp \left( - \frac{N}{2t} \right) \\
+    &= \frac{N}{\sqrt{2\pi}} \sqrt{\frac{t}{N}} \exp \left( - \frac{N}{2t} \right) \\
+    &= \sqrt{\frac{tN}{2 \pi}} \exp \left( - \frac{N}{2t} \right) \\
+\end{aligned}
+$$
+
+
+### Problem 4
+
+Notice that matching the terms in the $\lambda$-chain rule we have that:
+
+$$ H_w = \frac{2H^2}{H^2 + 1}$$
+
+then:
+
+$$
+\begin{aligned}
+  \frac{H^2 + 1}{2 H^2} \frac{dH}{dw} = 1
+    & \implies \left[ \frac{1}{2} + \frac{1}{H^2} \right]dH = dw \\
+    & \implies \frac{H(t)}{2} - \frac{1}{H(t)} - \frac{H(0)}{2} + \frac{1}{H(0)} = W(t)\\
+    & \implies \frac{H(t)}{2} - \frac{1}{H(t)} - \frac{1}{2} = W(t)\\
+    & \implies \frac{H(t)^2}{2} - 1 - \left(\frac{1}{2} + W(t)\right) = 0 \\
+    & \implies H(t) = \frac{1}{2} + W(t) \pm \sqrt{\left(\frac{1}{2} + W(t)\right)^2 + 2} \\
+    & \implies H(t) = \frac{1}{2} + W(t) + \sqrt{\left(\frac{1}{2} + W(t)\right)^2 + 2} \quad H(t)>0 \quad \text{for} \quad |H| \quad \text{small} \\
+\end{aligned}
+$$
+
+### Problem 5
+
+Consider the integrating factor:
+
+$$\mu(t) = \frac{1}{t+1}$$
+
+then:
+
+$$ d\left(\frac{1}{t+1}X(t)\right) = \frac{1}{t+1}dX + X(t)\left(-\frac{1}{(1+t)^2} \right)$$
+
+on the other hand:
+
+$$ \frac{1}{t+1}dX - X(t)\frac{1}{(1+t)^2} = \frac{1}{t+1}dW  $$
+
+then we have that:
+
+$$
+\begin{aligned}
+  d\left(\frac{1}{t+1}X(t)\right) &
+  = \frac{1}{t+1}dW \\
+  &\implies \frac{1}{t+1}X(t) - \frac{1}{0+1}X(0) = \int_0^t\frac{1}{s+1}dW \\
+  &\implies \frac{1}{t+1}X(t) - 1 = \int_0^t\frac{1}{s+1}dW \\
+  &\implies X(t)= (1+t) + (1+t) \int_0^t\frac{1}{s+1}dW \\
+\end{aligned}
+$$
+
+How since $\frac{1}{1+s}$ is a deterministic function we have that
+
+$$ \int_0^t\frac{1}{s+1}dW$$
+
+is normally distributed with mean
+
+$$ \dE \left[\int_0^t\frac{1}{s+1}dW \right] = 0 $$
+
+and varaince
+
+$$
+\begin{aligned}
+  \dE \left[ \left( \int_0^t\frac{1}{s+1}dW \right)^2 \right] 
+    &=  \int_0^t\left(\frac{1}{s+1}\right)^2 dW \\
+    &=  \left[ -\frac{1}{1+s} \right|_0^t \\
+    &=  -\frac{1}{1+t} + \frac{1}{1+0} \\
+    &=  1-\frac{1}{1+t}
+\end{aligned}
+$$
+
+then $X(t)$ is normally distributed with mean
+
+$$ \dE[X(t)] = 1 + t $$
+
+and varaince
+
+$$ \dV[X(t)] = \dE[X(t)^2] = (1+t)^2 \left( 1-\frac{1}{1+t} \right) = (t+1)^2 - (1+t) = (t+1)(t+1 -1) = (t+1)t $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

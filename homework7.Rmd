@@ -1,0 +1,367 @@
+---
+title:  "Homework 7"
+author: "Rene Gutierrez"
+date:   "5/23/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+\newcommand{\erf}{\text{erf}}
+\newcommand{\dV}{\mathbb{V}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dP}{\mathbb{P}}
+\newcommand{\dF}{\mathbb{F}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\Nd}{\text{N}}
+\newcommand{\Bd}{\text{Binomial}}
+\newcommand{\gss}{\sigma^2}
+
+## Homework 7
+
+### Problem 1
+
+#### Part 1
+
+$$
+\begin{aligned}
+  dX
+    &= (W(t) + dW)^3 - W(t)^3 \\
+    &= 3W(t)^2dW + 3W(t)dW^2 + dW^3 \\
+    &= 3W(t)^2dW + 3W(t)dt \\
+    &= 3X(t)^{\frac{1}{3}}dt + 3X(t)^{\frac{2}{3}}dW
+\end{aligned}
+$$
+
+Then the backward equation for $Q(x,t)$, the average reward at time $T$ given the starting time at $X(T-t)=x$ is given by:
+
+$$ Q_t = -3x^{\frac{1}{3}}Q_x - \frac{3}{2}x^{\frac{2}{3}}Q_{xx} $$
+
+#### Part 2
+
+Now consider
+
+$$Y(t) = X(t)^{\frac{1}{3}} = W(t)$$
+
+we know that the backward equation for $q_(y,t)$ the average reward at time $T$ given starting at $Y(T-t)=y$ is given by:
+
+$$q_t = \frac{1}{2}q_{yy}$$
+
+Now note that:
+
+$$ q(y,t) = Q(y^3, t) \quad \text{and} \quad q_t(y,t) = Q_t(y^3,t)$$
+
+and we also have that:
+
+$$ q_y(y,t) = Q_x(y^3,t)(3y^2) \quad \text{and} \quad q_{yy}(y,t) = Q_x(y^3,t)(6y) + (3y^2)^2Q_x(y^3,t)$$
+
+Then:
+
+$$
+\begin{aligned}
+  Q_t(x,t)
+    &= \frac{1}{2} \left[ Q_x(y^3,t)(6y) + (3y^2)^2Q_x(y^3,t) \right] \\
+    &= 3x^{\frac{1}{3}}Q_x(x,t) + \frac{9}{2}x^{\frac{4}{3}}Q_x(x,t)
+\end{aligned}
+$$
+
+giving us the same result as Part 1.
+
+### Problem 2
+
+Let $f(x,t)=\erf{\left(\frac{x}{\sqrt{2t}} \right)}$, then:
+
+#### Part a
+
+$$
+\begin{aligned}
+  \frac{\partial }{\partial t} \erf{\left(\frac{x}{\sqrt{2t}} \right)}
+    &= \frac{2}{\pi} e^{-\frac{x^2}{2t}}(-\frac{1}{2}(2t)^{-\frac{3}{2}}(2)(x)) \\
+    &= -\frac{x}{\sqrt{2t}}\frac{1}{t}e^{-\frac{x^2}{2t}}
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+  \frac{\partial }{\partial x} \erf{\left(\frac{x}{\sqrt{2t}} \right)}
+    &= \frac{2}{\pi} e^{-\frac{x^2}{2t}}\frac{1}{\sqrt{2t}} \\
+    &= \frac{1}{\pi} \sqrt{\frac{2}{ t}} e^{-\frac{x^2}{2t}}
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+  \frac{\partial^2 }{\partial x^2} \erf{\left(\frac{x}{\sqrt{2t}} \right)}
+    &= \frac{1}{\pi} \sqrt{\frac{2}{ t}} e^{-\frac{x^2}{2t}}\left( -\frac{x}{t} \right) \\
+    &= -\frac{x}{\pi t} \sqrt{\frac{2}{ t}} e^{-\frac{x^2}{2t}}\left( -\frac{x}{t} \right) \\
+\end{aligned}
+$$
+
+then:
+
+$$ \frac{\partial^2 }{\partial x^2} \erf{\left(\frac{x}{\sqrt{2t}} \right)} = -\frac{x}{\sqrt{2t}}\frac{1}{t}e^{-\frac{x^2}{2t}} $$
+
+Therefore, $f$ satisfies the PDE
+
+$$ u_t = \frac{1}{2}u_xx $$
+
+#### Part b
+
+Now, we have that:
+
+$$ f(1-1,t) = f(0,t) = \erf{\left(\frac{0}{\sqrt{2t}} \right)} = 0 $$
+And
+
+$$ f(1-(-2n+1),t) = f(2n,t) = \erf{\left(\frac{2n}{\sqrt{2t}} \right)} $$
+
+$$ f(1-(2n+1),t) = f(-2n,t) = \erf{\left(\frac{-2n}{\sqrt{2t}} \right)} = - \erf{\left(\frac{2n}{\sqrt{2t}} \right)} $$
+
+then:
+
+$$ v(1,t;n) = \erf{\left(\frac{2n}{\sqrt{2t}} \right)} - \erf{\left(\frac{2n}{\sqrt{2t}} \right)} = 0 \quad \forall n \in \mathbb{N} $$
+
+therefore $v$ and $f(x-1,t)$ satisfy the boundary condition $u(1,t)=0$.
+
+#### Part c
+
+Recalling that the error function is continuos we have that:
+
+$$
+\begin{aligned}
+  \lim_{t \to 0^+} f(x-1, t) 
+    &= \lim_{t \to 0^+} \erf{\left(\frac{x-1}{\sqrt{2t}} \right)} \\
+    &= \erf{\left(\lim_{t \to 0^+}\frac{x-1}{\sqrt{2t}} \right)} \\
+    &= \erf{\left(-\infty \right)} &\forall x\in(0,1) \\
+    &= -1
+\end{aligned}
+$$
+
+Similarly, we have that:
+
+$$
+\begin{aligned}
+  \lim_{t \to 0^+} f(x-(-2n+1), t) 
+    &= \lim_{t \to 0^+} \erf{\left(\frac{x+2n-1}{\sqrt{2t}} \right)} \\
+    &= \erf{\left(\lim_{t \to 0^+}\frac{x+2n-1}{\sqrt{2t}} \right)} \\
+    &= \erf{\left(\infty \right)} &\forall x\in(0,1),n\in\mathbb{N} \\
+    &= 1
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+  \lim_{t \to 0^+} f(x-(2n+1), t) 
+    &= \lim_{t \to 0^+} \erf{\left(\frac{x-2n-1}{\sqrt{2t}} \right)} \\
+    &= \erf{\left(\lim_{t \to 0^+}\frac{x-2n-1}{\sqrt{2t}} \right)} \\
+    &= \erf{\left(-\infty \right)} &\forall x\in(0,1),n\in\mathbb{N} \\
+    &= -1
+\end{aligned}
+$$
+
+Therefore:
+
+$$ \lim_{t \to 0^+} 1 + f(x - 1, t) = 0 \quad \text{and} \quad \lim_{t \to 0^+} v(x,t;n) = 0 \quad \forall x \in (0,1), n \in \mathbb{N} $$
+
+#### Part d
+
+Finally, we have that:
+
+Note that:
+
+$$ f_x(x - (-2n+1), t) = \sqrt{\frac{2}{t}} \frac{1}{\pi} e^{\frac{(x + 2n - 1))^2}{2t}} $$
+$$ f_x(x - (2n+1), t) = \sqrt{\frac{2}{t}} \frac{1}{\pi} e^{\frac{(x - 2n - 1))^2}{2t}} $$
+then
+
+$$ f_x(0 - (-2n+1), t) = \sqrt{\frac{2}{t}} \frac{1}{\pi} e^{\frac{(2n - 1)^2}{2t}} \quad \forall n \in \mathbb{N}$$
+
+$$ f_x(0 - (-2n+1), t) = \sqrt{\frac{2}{t}} \frac{1}{\pi} e^{\frac{(2n + 1)^2}{2t}} \quad \forall n \in \mathbb{N}$$
+
+then
+
+$$
+\begin{aligned}
+  \sum_{n=1}^{\infty} (-1)^n v_x (0,t;n) 
+    &= -f_x(-1,t) + \sum_{n=1}^{\infty} \left[ (-1)^n \sqrt{\frac{2}{t}} \frac{1}{\pi} e^{\frac{(2n + 1)^2}{2t}} + (-1)^{n+1} \sqrt{\frac{2}{t}} \frac{1}{\pi} e^{\frac{(2n + 1)^2}{2t}} \right] \\
+    &= -f_x(-1,t)
+\end{aligned}
+$$
+
+therefore
+
+$$ w_x(0,t) = 0 $$.
+
+### Problem 3
+
+#### Part 1
+
+$$
+\begin{aligned}
+  T(x) 
+    &= \int_x^1 e^{\alpha y} \int_0^y e^{-\alpha s} ds dy \\
+    &= -\frac{1}{\alpha} \int_x^1 e^{\alpha y} \left[ e^{-\alpha s} \right|_0^y dy \\
+    &= -\frac{1}{\alpha} \int_x^1 e^{\alpha y} (e^{-\alpha y} - 1) dy \\
+    &= -\frac{1}{\alpha} \int_x^1 (1 - e^{\alpha y}) dy \\
+    &= \frac{1}{\alpha} \int_x^1 e^{\alpha y} dy - \frac{1}{\alpha}\int_x^1dy \\
+    &= \frac{1}{\alpha^2} \left[ e^{\alpha y} \right|_x^1 - \frac{1-x}{\alpha} \\
+    &= \frac{e^\alpha - e^{\alpha x}}{\alpha^2}  - \frac{1-x}{\alpha} \\
+    &= \frac{e^\alpha}{\alpha^2}(1 - e^{\alpha (x-1)})  - \frac{1-x}{\alpha} \\
+\end{aligned}
+$$
+
+#### Part 2
+
+Now, for $\alpha$ big we have that:
+
+$$
+\begin{aligned}
+  \int_0^y e^{-\alpha s} ds
+    &\approx \int_0^\infty e^{-\alpha s} ds
+\end{aligned}
+$$
+
+since $e^{-\alpha s}$ is negligible for $s>y$. Then:
+
+$$ \int_0^y e^{-\alpha s} ds \approx -\frac{1}{\alpha} \left[ \alpha s \right|_0^\infty $$
+
+$$
+\begin{aligned}
+  \int_0^y e^{-\alpha s} ds 
+    &\approx -\frac{1}{\alpha} \left[ e^{-\alpha s} \right|_0^\infty \\
+    &= -\frac{1}{\alpha}(0 - 1) \\
+    &= \frac{1}{\alpha}
+\end{aligned}
+$$
+
+And we also have that:
+
+$$
+\begin{aligned}
+  \int_x^1 e^{\alpha y} dy
+    &= \frac{1}{\alpha} \left[ e^{\alpha y} \right|_x^1 \\
+    &= \frac{e^{\alpha}}{\alpha} (1 - e^{\alpha(1-x)}) 
+\end{aligned}
+$$
+
+Now if $x<1$ we have that $(1-x)<0$ and $e^{\alpha(1-x)}$ is negligible. Therefore:
+
+$$ \int_x^1 e^{\alpha y} dy \approx \frac{e^{\alpha}}{\alpha} $$
+
+Then:
+
+$$ T(x) \approx \frac{e^{\alpha}}{\alpha^2} $$
+
+independent of $x$.
+
+### Problem 4
+
+$$
+\begin{aligned}
+  T^B(x) 
+    &= \int_0^1 T(x) \rho(x) dx \\
+    &= \int_0^1 \left(\frac{e^\alpha - e^{\alpha x}}{\alpha^2}  - \frac{1-x}{\alpha} \right) \frac{\alpha e^{-\alpha}}{1-e^{-\alpha x}} dx \\
+    &= \frac{\alpha}{1-e^{-\alpha}}\int_0^1 \left(\frac{e^\alpha - e^{\alpha x}}{\alpha^2}  - \frac{1-x}{\alpha} \right) e^{-\alpha x} dx \\
+    &= \frac{\alpha}{1-e^{-\alpha}}\int_0^1 \left(\frac{e^\alpha e^{-\alpha x}}{\alpha^2} - \frac{e^{\alpha x}e^{-\alpha x}}{\alpha^2}  - \frac{e^{-\alpha x}}{\alpha} + \frac{xe^{-\alpha x}}{\alpha} \right) dx \\
+    &= \frac{\alpha}{1-e^{-\alpha}} \left(\frac{e^\alpha}{\alpha^2}\int_0^1 e^{-\alpha x} dx - \frac{1}{\alpha^2}\int_0^1dx  - \frac{1}{\alpha} \int_0^1 e^{-\alpha x} dx + \frac{1}{\alpha} \int_0^1xe^{-\alpha x}dx \right) \\
+\end{aligned}
+$$
+
+Now
+
+$$ \int_0^1 e^{-\alpha x} dx = -\frac{1}{\alpha}\left[ e^{-\alpha x} \right|_0^1 = -\frac{1}{\alpha}(e^{-\alpha} - 1) = \frac{1}{\alpha}(1 - e^{-\alpha})  $$
+ and
+ 
+$$
+\begin{aligned}
+  \int_0^1xe^{-\alpha x}dx
+    &= -\frac{1}{\alpha} \left[ xe^{-\alpha x}\right|_0^1 + \frac{1}{\alpha} \int_0^1 e^{-\alpha}dx \\
+    &= -\frac{e^{-\alpha}}{\alpha} - \frac{1}{\alpha^2} \left[ e^{-\alpha x} \right|_0^1 \\
+    &= -\frac{e^{-\alpha}}{\alpha} - \frac{1}{\alpha^2} (e^{-\alpha} - 1) \\
+    &= -\frac{e^{-\alpha}}{\alpha} + \frac{1}{\alpha^2} (1 - e^{-\alpha}) \\
+\end{aligned}
+$$
+
+Therefore
+
+$$
+\begin{aligned}
+  T^B(x) 
+    &= \frac{\alpha}{1-e^{-\alpha}} \left(\frac{e^\alpha}{\alpha^2}\int_0^1 e^{-\alpha x} dx - \frac{1}{\alpha^2}\int_0^1dx  - \frac{1}{\alpha} \int_0^1 e^{-\alpha x} dx + \frac{1}{\alpha} \int_0^1xe^{-\alpha x}dx \right) \\
+    &= \frac{\alpha}{1-e^{-\alpha}} \left(\frac{e^\alpha}{\alpha^2}\frac{1}{\alpha}(1 - e^{-\alpha}) - \frac{1}{\alpha^2} - \frac{1}{\alpha} \frac{1}{\alpha}(1 - e^{-\alpha}) + \frac{1}{\alpha} \left(\frac{1}{\alpha^2} (1 - e^{-\alpha}) - \frac{e^{-\alpha}}{\alpha} \right) \right) \\
+    &= \frac{\alpha}{1-e^{-\alpha}} \left(\frac{e^\alpha}{\alpha^2}\frac{1}{\alpha}(1 - e^{-\alpha}) - \frac{1}{\alpha^2} - \frac{1}{\alpha^2} + \frac{e^{-\alpha}}{\alpha^2} + \frac{1}{\alpha^2} \frac{1}{\alpha} (1 - e^{-\alpha}) - \frac{1}{\alpha}\frac{e^{-\alpha}}{\alpha} \right) \\
+    &= \frac{\alpha}{1-e^{-\alpha}} \left(2\frac{e^\alpha}{\alpha^2}\frac{1}{\alpha}(1 - e^{-\alpha}) - \frac{2}{\alpha^2} + \frac{e^{-\alpha}}{\alpha^2} - \frac{e^{-\alpha}}{\alpha^2} \right) \\
+    &= \frac{\alpha}{1-e^{-\alpha}} \left(2\frac{e^\alpha}{\alpha^2}\frac{1}{\alpha}(1 - e^{-\alpha}) - \frac{2}{\alpha^2} \right) \\
+    &= \frac{2 e^\alpha}{\alpha^2} - \frac{2}{\alpha} \frac{1}{1-e^{-\alpha}} \\
+\end{aligned}
+$$
+
+Then as $\alpha \to \infty$ we have that:
+
+$$ \lim_{\alpha \to \infty} \frac{T^A(x)}{T^B(x)} = \frac{1}{2} $$ 
+
+where $T^A(x)$ is the approximation from problem 3.
+
+### Problem 5
+
+Let $\rho(t)\equiv G''(t)$, that is:
+
+$$ G(t) \equiv \int_t^\infty \int_u^\infty \rho(s) ds $$
+
+then we have that integrating by parts twice:
+
+$$ \int_{t_0}^\infty (t-t_0)^2 \rho(t) dt = -2 \int_{t_0}^\infty G(t) dt $$
+
+then, from the memoryless property we have that:
+
+$$ -2 \int_{t_0}^\infty G(t) dt = \dE[Y^2] \int_{t_0}^\infty \rho(t) dt  $$
+then:
+
+$$ -2 \int_{t_0}^\infty G(t) dt = \dE[Y^2] G'(t_0). $$
+
+
+Now differentiating with respect to $t_0$ we have:
+
+$$ 2G(t_0) = \dE[Y^2] G''(t_0) $$
+
+and rearrenging the terms and going back to $t$, we have that:
+
+$$ G(t) = \frac{1}{2} \dE[Y^2]G''(t) $$
+Call 
+
+$$\alpha^2 = \frac{\dE[Y^2]}{2}$$
+
+then we have that:
+
+$$ G(t) = \alpha^2G''(t) $$
+
+then
+
+$$ G(t) = A e^{\frac{t}{\alpha}} + B e^{-\frac{t}{\alpha}} $$
+
+Now note that 
+
+$$ \lim_{t \to \infty} G(t) = 0 \quad \iff A = 0 $$
+
+then
+
+$$ G(t) = Be^{-\frac{t}{\alpha}} $$
+
+therefore:
+
+$$ \rho(t) = G''(t) = \frac{B}{\alpha^2} e^{-\frac{t}{\alpha}} $$
+
+finally, since:
+
+$$ \int_0^\infty \rho(t) dt = 1 $$
+we have that
+
+$$ B = \alpha^3 $$
+
+which results in
+
+$$ \rho(t) = \alpha e^{-\frac{t}{\alpha}} $$
+
+the pdf of an exponential distribution.
+
+
+
